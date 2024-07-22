@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File management</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div class="form">
+        <form action="">
+          <label for="username">Enter your username</label>
+          <input type="text" id="username" required />
+          <label for="password">Enter your password</label>
+          <input type="password" id="password" required />
+          <button type="submit">Ok, lets go..</button>
+        </form>
+      </div>
+      <h1 id="router"></h1>
+      <div class="mainFolder" style="display: none">
+        <div class="dir">
+          <template>
+            <div class="unit">
+              <img src="" alt="icon" data-type="" />
+              <p class="name"></p>
+            </div>
+          </template>
+        </div>
+      </div>
+      <div class="options">
+        <button class="option show">show</button>
+        <button class="option info">info</button>
+        <button class="option rename">rename</button>
+        <button class="option copy">copy</button>
+      </div>
+    </main>
+    <footer></footer>
+    <script src="appClient.js"></script>
+  </body>
+</html>
