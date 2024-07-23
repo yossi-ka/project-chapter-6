@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, "client")));
 
 /* ---  GET METHODS --- */
 
-let localPath = "folders";
+let localPath = "folders/yossi-ka";
 let cmd = path.join(__dirname, localPath);
 
 app.get("/", (req, res) => {
@@ -58,13 +58,16 @@ app.get("/:user/file/copy/:filename", (req, res) => {
   res.send("Successfully copied!");
 });
 app.put("/:user/file/move/:filename", (req, res) => {
-  fs.renameSync(`${localPath}/${req.params.filename}`, `${req.body.newpath}`);
+  fs.renameSync(
+    `${localPath}/${req.params.filename}`,
+    `folders/${req.params.user}/${req.body.newpath}`
+  );
   res.send("File was transferred successfully!");
 });
-app.delete("/:user/file/delete/:filename"),
-  (req, res) => {
-    fs.unlinkSync(`${localPath}/${req.params.filename}`);
-  };
+app.delete("/:user/file/delete/:filename", (req, res) => {
+  fs.unlinkSync(`${localPath}/${req.params.filename}`);
+  res.send("the file was successfully deleted!");
+});
 
 // app.get("/folders/:user/:file/:method", (req, res) => {
 //   const user = req.params.user;
