@@ -2,10 +2,13 @@ const form = document.querySelector(".form");
 const content = document.querySelector(".content");
 const router = document.querySelector(".router");
 const mainFolder = document.querySelector(".mainFolder");
+const popup = document.querySelector(".popup");
+const x = document.querySelector("span");
 const h1 = document.querySelector("h1");
 const baseURL = "http://localhost:3000";
 let currentURL = "folders";
 let currentUser;
+let selectedItem;
 form.addEventListener("submit", (ev) => {
   ev.preventDefault();
   const inputs = form.querySelectorAll("input");
@@ -34,9 +37,10 @@ async function login(username, password) {
 async function dirDisplay(folder) {
   //  shows folder content
   document.querySelectorAll(".unit").forEach((el) => el.remove());
-  currentURL = await fetch(
+  const path = await fetch(
     `http://localhost:3000/${currentUser}/folder/enter/${folder}`
   );
+  currentURL = await path.text();
   h1.textContent = currentURL;
   const dir = await fetch(
     `http://localhost:3000/${currentUser}/folder/show/${folder}`
@@ -51,7 +55,9 @@ async function dirDisplay(folder) {
     tempP.textContent = dirArr[i];
     tempImg.setAttribute("src", dirArr[i + 1] ? "./file.png" : "./folder.png");
     tempImg.setAttribute("data-type", dirArr[i + 1] ? "file" : "folder");
+    // tempImg.setAttribute("data-name", tempP);
     tempImg.addEventListener("click", () => {
+      selectedItem = tempP.textContent;
       document.querySelector(
         `.${tempImg.getAttribute("data-type")}_actions`
       ).style.display = "block";
@@ -61,20 +67,116 @@ async function dirDisplay(folder) {
   }
 }
 
-const opt = document.querySelectorAll(".option");
-opt.forEach(async (el) => {
-  el.addEventListener("click", async (ev) => {
-    let res;
-    if (ev.target.textContent === "rename") {
-      let newname = prompt("new name");
-      let r = await fetch(
-        `${baseURL}${currentURL}/${ev.target.textContent}/${newname}`
-      );
-      res = await r.text();
-    } else {
-      let r = await fetch(`${baseURL}${currentURL}/${ev.target.textContent}`);
-      res = await r.text();
+const btns = document.querySelectorAll(".action");
+btns.forEach((btn) => {
+  btn.addEventListener("click", (ev) => {
+    if (ev.target.classList.value.includes("file")) {
+      switch (btn.textContent) {
+        case "show":
+          showFile();
+          break;
+        case "copy":
+          copyFile();
+          break;
+        case "rename":
+          renameFile();
+          break;
+        case "move":
+          moveFile();
+          break;
+        case "delete":
+          deleteFile();
+          break;
+        case "info":
+          infoFile();
+          break;
+      }
+    } else if (ev.target.classList.value.includes("folder")) {
+      switch (btn.textContent) {
+        case "rename":
+          renameFolder();
+          break;
+        case "delete":
+          deleteFolder();
+          break;
+        case "info":
+          infoFolder();
+          break;
+        case "show":
+          showFolder();
+          break;
+      }
     }
-    console.log(res);
   });
+});
+
+async function showFile() {
+  const res = await fetch(`${currentUser}/file/show/${selectedItem}`);
+  if (res.ok) popup.textContent = res;
+}
+async function infoFile() {
+  const res = await fetch(`${currentUser}/file/info/${selectedItem}`);
+  console.log(await res.text());
+  if (res.ok) popup.textContent = res;
+}
+async function copyFile() {
+  const res = await fetch(`${currentUser}/file/copy/${selectedItem}`);
+  if (res.ok) popup.textContent = res;
+}
+async function renameFile() {
+  const newname = prompt("enter new name:");
+  const res = await fetch(`${currentUser}/file/rename/${selectedItem}`, {
+    method: "PUT",
+    body: {
+      newname: newname,
+    },
+  });
+  if (res.ok) popup.textContent = res;
+}
+async function moveFile() {
+  const newpath = prompt("enter the new path:");
+  const res = await fetch(`${currentUser}/file/move/${selectedItem}`, {
+    method: "PUT",
+    body: {
+      newpath: newpath,
+    },
+  });
+  if (res.ok) popup.textContent = res;
+}
+async function deleteFile() {
+  const res = await fetch(`${currentUser}/file/delete/${selectedItem}`, {
+    method: "DELETE",
+  });
+  if (res.ok) popup.textContent = res;
+}
+async function showFolder() {
+  const path = await fetch(`${currentUser}/folder/enter/${selectedItem}`);
+  if (path.ok) {
+    const res = await fetch(`${currentUser}/folder/show/${selectedItem}`);
+    if (res.ok) popup.textContent = res;
+  }
+}
+async function infoFolder() {
+  const res = await fetch(`${currentUser}/folder/info/${selectedItem}`);
+  if (res.ok) popup.textContent = res;
+}
+async function renameFolder() {
+  const newname = prompt("enter new name:");
+  const res = await fetch(`${currentUser}/folder/rename/${selectedItem}`, {
+    method: "PUT",
+    body: {
+      newname: newname,
+    },
+  });
+  if (res.ok) popup.textContent = res;
+}
+async function deleteFolder() {
+  const res = await fetch(`${currentUser}/folder/delete/${selectedItem}`, {
+    method: "DELETE",
+  });
+  if (res.ok) popup.textContent = res;
+}
+
+document.body.addEventListener("click", () => {
+  popup.textContent = "";
 });

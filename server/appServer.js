@@ -40,10 +40,12 @@ app.get("/:user/file/info/:filename", (req, res) => {
   const states = fs.statSync(`${localPath}/${req.params.filename}`);
   res.send(states);
 });
+
 app.get("/:user/file/show/:filename", (req, res) => {
   const data = fs.readFileSync(`${localPath}/${req.params.filename}`, "utf-8");
   res.send(data);
 });
+
 app.put("/:user/file/rename/:filename", (req, res) => {
   fs.renameSync(
     `${localPath}/${req.params.filename}`,
@@ -51,6 +53,7 @@ app.put("/:user/file/rename/:filename", (req, res) => {
   );
   res.send("Successfully renamed!");
 });
+
 app.get("/:user/file/copy/:filename", (req, res) => {
   fs.copyFileSync(
     `${localPath}/${req.params.filename}`,
@@ -58,6 +61,7 @@ app.get("/:user/file/copy/:filename", (req, res) => {
   );
   res.send("Successfully copied!");
 });
+
 app.put("/:user/file/move/:filename", (req, res) => {
   fs.renameSync(
     `${localPath}/${req.params.filename}`,
@@ -65,6 +69,7 @@ app.put("/:user/file/move/:filename", (req, res) => {
   );
   res.send("File was transferred successfully!");
 });
+
 app.delete("/:user/file/delete/:filename", (req, res) => {
   fs.unlinkSync(`${localPath}/${req.params.filename}`);
   res.send("the file was successfully deleted!");
@@ -155,8 +160,8 @@ async function readUsers() {
   const users = await JSON.parse(fs.readFileSync("users.json", "utf-8"));
   return users;
 }
-app.post("/login", (req, res) => {
-  const users = readUsers();
+app.post("/login", async (req, res) => {
+  const users = await readUsers();
   const foundUser = users.find((u) => {
     return req.body.username === u.username && req.body.password === u.password;
   });

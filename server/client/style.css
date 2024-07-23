@@ -45,3 +45,12 @@ button {
   padding: 15px;
   width: 200px;
 }
+span {
+  border: 1px solid black;
+  padding: 2px;
+}
+.popup {
+  color: white;
+  background-color: green;
+  font-size: 30px;
+}
