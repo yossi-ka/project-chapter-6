@@ -9,7 +9,7 @@ const port = process.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "client")));
 
-let localPath = "folders/yossi-ka";
+let localPath = "folders";
 let cmd = path.join(__dirname, localPath);
 
 app.get("/", (req, res) => {
@@ -107,6 +107,15 @@ app.delete("/:user/folder/delete/:foldername", (req, res) => {
   });
 });
 
+app.get("/:user/folder/up/:foldername", (req, res) => {
+  localPath = localPath.substring(0, localPath.lastIndexOf("/"));
+  res.send(localPath);
+});
+
+app.get("/:user/logout", (req, res) => {
+  localPath = "folders";
+});
+
 // app.get("/folders/:user/:file/:method", (req, res) => {
 //   const user = req.params.user;
 //   const file = req.params.file;
@@ -140,9 +149,8 @@ app.delete("/:user/folder/delete/:foldername", (req, res) => {
 //   res.send("Success");
 // });
 
-/* ---  POST METHODS --- */
-function readUsers() {
-  const users = JSON.parse(fs.readFileSync("users.json", "utf-8"));
+async function readUsers() {
+  const users = await JSON.parse(fs.readFileSync("users.json", "utf-8"));
   return users;
 }
 app.post("/login", (req, res) => {

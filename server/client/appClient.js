@@ -20,6 +20,14 @@ async function login(username, password) {
   }
 }
 
+form.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const inputs = form.querySelectorAll("input");
+  const username = inputs[0].value;
+  const password = inputs[1].value;
+  login(username, password);
+});
+
 async function dirDisplay(folder) {
   document.querySelectorAll(".unit").forEach((el) => el.remove());
   const dir = await fetch(`http://localhost:3000/enter/${folder}`);
@@ -38,7 +46,7 @@ async function dirDisplay(folder) {
       tempImg.setAttribute("data-type", "file");
       tempImg.setAttribute("src", "./file.png");
       tempImg.addEventListener("click", (ev) => {
-        document.querySelector(".options").style.display = "flex";
+        document.querySelector(".file_options").style.display = "flex";
         currentURL += `/${dirArr[i]}`;
       });
     } else {
@@ -54,14 +62,6 @@ async function dirDisplay(folder) {
   }
   mainFolder.style.display = "block";
 }
-
-form.addEventListener("submit", (ev) => {
-  ev.preventDefault();
-  const inputs = form.querySelectorAll("input");
-  const username = inputs[0].value;
-  const password = inputs[1].value;
-  login(username, password);
-});
 
 const opt = document.querySelectorAll(".option");
 opt.forEach(async (el) => {
