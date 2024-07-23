@@ -37,8 +37,6 @@ img {
   align-items: center;
   gap: 10px;
   border: black 3px solid;
-  width: 500px;
-  height: 500px;
 }
 button {
   font-size: 30px;

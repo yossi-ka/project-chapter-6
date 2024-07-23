@@ -112,16 +112,15 @@ btns.forEach((btn) => {
 
 async function showFile() {
   const res = await fetch(`${currentUser}/file/show/${selectedItem}`);
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function infoFile() {
   const res = await fetch(`${currentUser}/file/info/${selectedItem}`);
-  console.log(await res.text());
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function copyFile() {
   const res = await fetch(`${currentUser}/file/copy/${selectedItem}`);
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function renameFile() {
   const newname = prompt("enter new name:");
@@ -131,7 +130,7 @@ async function renameFile() {
       newname: newname,
     },
   });
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function moveFile() {
   const newpath = prompt("enter the new path:");
@@ -141,24 +140,24 @@ async function moveFile() {
       newpath: newpath,
     },
   });
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function deleteFile() {
   const res = await fetch(`${currentUser}/file/delete/${selectedItem}`, {
     method: "DELETE",
   });
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function showFolder() {
   const path = await fetch(`${currentUser}/folder/enter/${selectedItem}`);
   if (path.ok) {
     const res = await fetch(`${currentUser}/folder/show/${selectedItem}`);
-    if (res.ok) popup.textContent = res;
+    if (res.ok) popup.textContent = await res.text();
   }
 }
 async function infoFolder() {
   const res = await fetch(`${currentUser}/folder/info/${selectedItem}`);
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function renameFolder() {
   const newname = prompt("enter new name:");
@@ -168,13 +167,13 @@ async function renameFolder() {
       newname: newname,
     },
   });
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 async function deleteFolder() {
   const res = await fetch(`${currentUser}/folder/delete/${selectedItem}`, {
     method: "DELETE",
   });
-  if (res.ok) popup.textContent = res;
+  if (res.ok) popup.textContent = await res.text();
 }
 
 document.body.addEventListener("click", () => {
