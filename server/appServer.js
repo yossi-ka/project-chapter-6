@@ -16,22 +16,23 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "index.html"));
 });
 
-app.get("/enter/:folder", (req, res) => {
-  const folder = req.params.folder;
-  localPath += `/${folder}`;
-  cmd = path.join(__dirname, localPath);
-  const dir = fs.readdir(localPath, "utf-8", (err, dir) => {
-    if (err) {
-      res.send(err);
-    } else {
-      const dirSend = [];
-      for (let i = 0; i < dir.length; i++) {
-        dirSend.push(dir[i], fs.statSync(`${localPath}/${dir[i]}`).isFile());
-      }
-      res.send(dirSend);
-    }
-  });
-});
+//  מיותר?
+// app.get("/enter/:folder", (req, res) => {
+//   const folder = req.params.folder;
+//   localPath += `/${folder}`;
+//   cmd = path.join(__dirname, localPath);
+//   const dir = fs.readdir(localPath, "utf-8", (err, dir) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       const dirSend = [];
+//       for (let i = 0; i < dir.length; i++) {
+//         dirSend.push(dir[i], fs.statSync(`${localPath}/${dir[i]}`).isFile());
+//       }
+//       res.send(dirSend);
+//     }
+//   });
+// });
 
 /*   ---  FILE METHODS  ---   */
 
@@ -73,10 +74,11 @@ app.delete("/:user/file/delete/:filename", (req, res) => {
 
 app.get("/:user/folder/enter/:foldername", (req, res) => {
   localPath += `/${req.params.foldername}`;
+  res.send(localPath);
 });
 
 app.get("/:user/folder/show/:foldername", (req, res) => {
-  const folder = req.params.foldername;
+  // const folder = req.params.foldername;
   const dir = fs.readdir(localPath, "utf-8", (err, dir) => {
     if (err) {
       res.send(err);

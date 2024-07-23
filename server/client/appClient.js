@@ -1,10 +1,18 @@
 const form = document.querySelector(".form");
-const dirContent = document.querySelector(".dir");
-const baseURL = "http://localhost:3000";
+const content = document.querySelector(".content");
 const router = document.querySelector(".router");
 const mainFolder = document.querySelector(".mainFolder");
 const h1 = document.querySelector("h1");
+const baseURL = "http://localhost:3000";
 let currentURL = "folders";
+let currentUser;
+form.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const inputs = form.querySelectorAll("input");
+  const username = inputs[0].value;
+  const password = inputs[1].value;
+  login(username, password);
+});
 
 async function login(username, password) {
   const res = await fetch(`${baseURL}/login`, {
@@ -15,26 +23,25 @@ async function login(username, password) {
     body: JSON.stringify({ username: username, password: password }),
   });
   if (res.ok) {
+    form.style.display = "none";
+    mainFolder.style.display = "block";
     const user = await res.json();
+    currentUser = user.username;
     dirDisplay(user.username);
   }
 }
 
-form.addEventListener("submit", (ev) => {
-  ev.preventDefault();
-  const inputs = form.querySelectorAll("input");
-  const username = inputs[0].value;
-  const password = inputs[1].value;
-  login(username, password);
-});
-
 async function dirDisplay(folder) {
+  //  shows folder content
   document.querySelectorAll(".unit").forEach((el) => el.remove());
-  const dir = await fetch(`http://localhost:3000/enter/${folder}`);
-  const dirArr = await dir.json();
-  currentURL += `/${folder}`;
+  currentURL = await fetch(
+    `http://localhost:3000/${currentUser}/folder/enter/${folder}`
+  );
   h1.textContent = currentURL;
-  form.style.display = "none";
+  const dir = await fetch(
+    `http://localhost:3000/${currentUser}/folder/show/${folder}`
+  );
+  const dirArr = await dir.json();
 
   for (let i = 0; i < dirArr.length; i += 2) {
     const temp = document.querySelector("template").content.cloneNode(true);
@@ -42,25 +49,16 @@ async function dirDisplay(folder) {
     const tempImg = temp.querySelector("img");
     const tempP = temp.querySelector("p");
     tempP.textContent = dirArr[i];
-    if (dirArr[i + 1]) {
-      tempImg.setAttribute("data-type", "file");
-      tempImg.setAttribute("src", "./file.png");
-      tempImg.addEventListener("click", (ev) => {
-        document.querySelector(".file_options").style.display = "flex";
-        currentURL += `/${dirArr[i]}`;
-      });
-    } else {
-      tempImg.setAttribute("data-type", "folder");
-      tempImg.setAttribute("src", "./folder.png");
-      tempImg.addEventListener("click", () => {
-        dirDisplay(dirArr[i]);
-      });
-    }
-
-    tempDiv.setAttribute("data-url", `${baseURL}/${currentURL}/${dirArr[i]}`);
-    dirContent.append(temp);
+    tempImg.setAttribute("src", dirArr[i + 1] ? "./file.png" : "./folder.png");
+    tempImg.setAttribute("data-type", dirArr[i + 1] ? "file" : "folder");
+    tempImg.addEventListener("click", () => {
+      document.querySelector(
+        `.${tempImg.getAttribute("data-type")}_actions`
+      ).style.display = "block";
+    });
+    // tempDiv.setAttribute("data-url", `${baseURL}/${currentURL}/${dirArr[i]}`);
+    content.append(temp);
   }
-  mainFolder.style.display = "block";
 }
 
 const opt = document.querySelectorAll(".option");

@@ -20,9 +20,10 @@
           <button type="submit">Ok, lets go..</button>
         </form>
       </div>
-      <h1 id="router"></h1>
       <div class="mainFolder" style="display: none">
-        <div class="dir">
+        <h1 id="router"></h1>
+
+        <div class="content">
           <template>
             <div class="unit">
               <img src="" alt="icon" data-type="" />
@@ -30,20 +31,22 @@
             </div>
           </template>
         </div>
-      </div>
-      <div class="file_options">
-        <button class="option show">show</button>
-        <button class="option info">info</button>
-        <button class="option rename">rename</button>
-        <button class="option copy">copy</button>
-        <button class="option move">move</button>
-        <button class="option delete">delete</button>
-      </div>
-      <div class="folder_options">
-        <button class="option show">show</button>
-        <button class="option info">info</button>
-        <button class="option rename">rename</button>
-        <button class="option delete">delete</button>
+
+        <div class="file_actions">
+          <button class="file show">show</button>
+          <button class="file info">info</button>
+          <button class="file rename">rename</button>
+          <button class="file copy">copy</button>
+          <button class="file move">move</button>
+          <button class="file delete">delete</button>
+        </div>
+
+        <div class="folder_actions">
+          <button class="folder show">show</button>
+          <button class="folder info">info</button>
+          <button class="folder rename">rename</button>
+          <button class="folder delete">delete</button>
+        </div>
       </div>
     </main>
     <footer></footer>
