@@ -40,7 +40,6 @@ async function dirDisplay(folder) {
       tempImg.addEventListener("click", (ev) => {
         document.querySelector(".options").style.display = "flex";
         currentURL += `/${dirArr[i]}`;
-        console.log(currentURL);
       });
     } else {
       tempImg.setAttribute("data-type", "folder");
