@@ -14,6 +14,10 @@ app.use(express.static(path.join(__dirname, "client")));
 let localPath = "folders";
 let cmd = path.join(__dirname, localPath);
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "index.html"));
+});
+
 app.get("/enter/:folder", (req, res) => {
   const folder = req.params.folder;
   localPath += `/${folder}`;
@@ -31,42 +35,61 @@ app.get("/enter/:folder", (req, res) => {
   });
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "index.html"));
+app.get("/:user/file/info/:filename", (req, res) => {
+  const states = fs.statSync(`${localPath}/${req.params.filename}`);
+  res.send(states);
+});
+app.get("/:user/file/show/:filename", (req, res) => {
+  const data = fs.readFileSync(`${localPath}/${req.params.filename}`, "utf-8");
+  res.send(data);
+});
+app.get("/:user/file/rename/:filename/:newname", (req, res) => {
+  fs.renameSync(
+    `${localPath}/${req.params.filename}`,
+    `${localPath}/${req.params.newname}`
+  );
+  res.send("Successfully renamed!");
+});
+app.get("/:user/file/copy/:filename", (req, res) => {
+  fs.copyFileSync(
+    `${localPath}/${req.params.filename}`,
+    `${localPath}/copy_${req.params.filename}`
+  );
+  res.send("Successfully copied!");
 });
 
-app.get("/folders/:user/:file/:method", (req, res) => {
-  const user = req.params.user;
-  const file = req.params.file;
-  const method = req.params.method;
-  switch (method) {
-    case "show": {
-      const data = fs.readFileSync(`folders/${user}/${file}`, "utf-8");
-      res.send(data);
-      break;
-    }
-    case "info": {
-      const stats = fs.statSync(`folders/${user}/${file}`);
-      res.send(stats);
-      break;
-    }
-    case "copy": {
-      fs.copyFileSync(
-        `folders/${user}/${file}`,
-        `folders/${user}/copy_${file}`
-      );
-      res.send("Successfully copied!");
-      break;
-    }
-  }
-});
-app.get("/folders/:user/:file/rename/:newname", (req, res) => {
-  const user = req.params.user;
-  const oldName = req.params.file;
-  const newName = req.params.newname;
-  fs.renameSync(`folders/${user}/${oldName}`, `folders/${user}/${newName}`);
-  res.send("Success");
-});
+// app.get("/folders/:user/:file/:method", (req, res) => {
+//   const user = req.params.user;
+//   const file = req.params.file;
+//   const method = req.params.method;
+//   switch (method) {
+//     case "show": {
+//       const data = fs.readFileSync(`folders/${user}/${file}`, "utf-8");
+//       res.send(data);
+//       break;
+//     }
+//     case "info": {
+//       const stats = fs.statSync(`folders/${user}/${file}`);
+//       res.send(stats);
+//       break;
+//     }
+//     case "copy": {
+//       fs.copyFileSync(
+//         `folders/${user}/${file}`,
+//         `folders/${user}/copy_${file}`
+//       );
+//       res.send("Successfully copied!");
+//       break;
+//     }
+//   }
+// });
+// app.get("/folders/:user/:file/rename/:newname", (req, res) => {
+//   const user = req.params.user;
+//   const oldName = req.params.file;
+//   const newName = req.params.newname;
+//   fs.renameSync(`folders/${user}/${oldName}`, `folders/${user}/${newName}`);
+//   res.send("Success");
+// });
 
 /* ---  POST METHODS --- */
 function readUsers() {
