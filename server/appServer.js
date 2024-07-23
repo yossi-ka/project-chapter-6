@@ -43,10 +43,10 @@ app.get("/:user/file/show/:filename", (req, res) => {
   const data = fs.readFileSync(`${localPath}/${req.params.filename}`, "utf-8");
   res.send(data);
 });
-app.get("/:user/file/rename/:filename/:newname", (req, res) => {
+app.put("/:user/file/rename/:filename", (req, res) => {
   fs.renameSync(
     `${localPath}/${req.params.filename}`,
-    `${localPath}/${req.params.newname}`
+    `${localPath}/${req.body.newname}`
   );
   res.send("Successfully renamed!");
 });
@@ -57,6 +57,14 @@ app.get("/:user/file/copy/:filename", (req, res) => {
   );
   res.send("Successfully copied!");
 });
+app.put("/:user/file/move/:filename", (req, res) => {
+  fs.renameSync(`${localPath}/${req.params.filename}`, `${req.body.newpath}`);
+  res.send("File was transferred successfully!");
+});
+app.delete("/:user/file/delete/:filename"),
+  (req, res) => {
+    fs.unlinkSync(`${localPath}/${req.params.filename}`);
+  };
 
 // app.get("/folders/:user/:file/:method", (req, res) => {
 //   const user = req.params.user;
