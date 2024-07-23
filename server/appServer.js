@@ -9,8 +9,6 @@ const port = process.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "client")));
 
-/* ---  GET METHODS --- */
-
 let localPath = "folders/yossi-ka";
 let cmd = path.join(__dirname, localPath);
 
@@ -34,6 +32,8 @@ app.get("/enter/:folder", (req, res) => {
     }
   });
 });
+
+/*   ---  FILE METHODS  ---   */
 
 app.get("/:user/file/info/:filename", (req, res) => {
   const states = fs.statSync(`${localPath}/${req.params.filename}`);
@@ -67,6 +67,44 @@ app.put("/:user/file/move/:filename", (req, res) => {
 app.delete("/:user/file/delete/:filename", (req, res) => {
   fs.unlinkSync(`${localPath}/${req.params.filename}`);
   res.send("the file was successfully deleted!");
+});
+
+/*   ---  FOLDER METHODS  ---   */
+
+app.get("/:user/folder/enter/:foldername", (req, res) => {
+  localPath += `/${req.params.foldername}`;
+});
+
+app.get("/:user/folder/show/:foldername", (req, res) => {
+  const folder = req.params.foldername;
+  const dir = fs.readdir(localPath, "utf-8", (err, dir) => {
+    if (err) {
+      res.send(err);
+    } else {
+      const dirSend = [];
+      for (let i = 0; i < dir.length; i++) {
+        dirSend.push(dir[i], fs.statSync(`${localPath}/${dir[i]}`).isFile());
+      }
+      res.send(dirSend);
+    }
+  });
+});
+
+app.put("/:user/folder/rename/:foldername", (req, res) => {
+  fs.renameSync(
+    `${localPath}/${req.params.foldername}`,
+    `${localPath}/${req.body.newname}`
+  );
+});
+
+app.delete("/:user/folder/delete/:foldername", (req, res) => {
+  fs.rmdir(`${localPath}/${req.params.foldername}`, (err, success) => {
+    if (err) {
+      res.send("cannot delete this folder, please delete its contents first");
+    } else {
+      res.send("the folder waz been deleted successfully!");
+    }
+  });
 });
 
 // app.get("/folders/:user/:file/:method", (req, res) => {
