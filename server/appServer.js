@@ -102,48 +102,13 @@ app.get("/:user/folder/up/:foldername", (req, res) => {
   res.send(localPath);
 });
 
-app.get("/:user/logout", (req, res) => {
-  localPath = "folders";
-  res.send("good bay!");
-});
-
-// app.get("/folders/:user/:file/:method", (req, res) => {
-//   const user = req.params.user;
-//   const file = req.params.file;
-//   const method = req.params.method;
-//   switch (method) {
-//     case "show": {
-//       const data = fs.readFileSync(`folders/${user}/${file}`, "utf-8");
-//       res.send(data);
-//       break;
-//     }
-//     case "info": {
-//       const stats = fs.statSync(`folders/${user}/${file}`);
-//       res.send(stats);
-//       break;
-//     }
-//     case "copy": {
-//       fs.copyFileSync(
-//         `folders/${user}/${file}`,
-//         `folders/${user}/copy_${file}`
-//       );
-//       res.send("Successfully copied!");
-//       break;
-//     }
-//   }
-// });
-// app.get("/folders/:user/:file/rename/:newname", (req, res) => {
-//   const user = req.params.user;
-//   const oldName = req.params.file;
-//   const newName = req.params.newname;
-//   fs.renameSync(`folders/${user}/${oldName}`, `folders/${user}/${newName}`);
-//   res.send("Success");
-// });
+/*   ---   LOG IN/OUT   ---   */
 
 async function readUsers() {
   const users = await JSON.parse(fs.readFileSync("users.json", "utf-8"));
   return users;
 }
+
 app.post("/login", async (req, res) => {
   const users = await readUsers();
   const foundUser = users.find((u) => {
@@ -153,6 +118,11 @@ app.post("/login", async (req, res) => {
   if (foundUser) {
     res.send(foundUser);
   } else res.status(401).send("user not exist");
+});
+
+app.get("/:user/logout", (req, res) => {
+  localPath = "folders";
+  res.send("good bay!");
 });
 
 app.listen(port, () => {
