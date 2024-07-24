@@ -1,3 +1,5 @@
+
+
 const form = document.querySelector(".form");
 const content = document.querySelector(".content");
 const router = document.querySelector(".router");
@@ -30,6 +32,11 @@ async function login(username, password) {
     mainFolder.style.display = "block";
     const user = await res.json();
     currentUser = user.username;
+    const path = await fetch(
+      `http://localhost:3000/${currentUser}/folder/enter/${user.username}`
+    );
+    currentURL = await path.text();
+    h1.textContent = currentURL;
     dirDisplay(user.username);
   }
 }
@@ -37,11 +44,6 @@ async function login(username, password) {
 async function dirDisplay(folder) {
   //  shows folder content
   document.querySelectorAll(".unit").forEach((el) => el.remove());
-  const path = await fetch(
-    `http://localhost:3000/${currentUser}/folder/enter/${folder}`
-  );
-  currentURL = await path.text();
-  h1.textContent = currentURL;
   const dir = await fetch(
     `http://localhost:3000/${currentUser}/folder/show/${folder}`
   );
@@ -113,24 +115,32 @@ async function showFile() {
   const res = await fetch(`${currentUser}/file/show/${selectedItem}`);
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function infoFile() {
   const res = await fetch(`${currentUser}/file/info/${selectedItem}`);
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function copyFile() {
   const res = await fetch(`${currentUser}/file/copy/${selectedItem}`);
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function renameFile() {
   const newname = prompt("enter new name:");
+  console.log(`${currentUser}/file/rename/${selectedItem}`);
   const res = await fetch(`${currentUser}/file/rename/${selectedItem}`, {
     method: "PUT",
-    body: {
-      newname: newname,
+    headers: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      newname: newname,
+    }),
   });
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function moveFile() {
   const newpath = prompt("enter the new path:");
   const res = await fetch(`${currentUser}/file/move/${selectedItem}`, {
@@ -141,19 +151,30 @@ async function moveFile() {
   });
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function deleteFile() {
   const res = await fetch(`${currentUser}/file/delete/${selectedItem}`, {
     method: "DELETE",
   });
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function showFolder() {
-  dirDisplay(selectedItem)
+  const path = await fetch(
+    `http://localhost:3000/${currentUser}/folder/enter/${selectedItem}`
+  );
+  currentURL = await path.text();
+  h1.textContent = currentURL;
+  document.querySelector(".folder_actions").style.display = "none";
+  document.querySelector(".file_actions").style.display = "none";
+  dirDisplay(selectedItem);
 }
+
 async function infoFolder() {
   const res = await fetch(`${currentUser}/folder/info/${selectedItem}`);
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function renameFolder() {
   const newname = prompt("enter new name:");
   const res = await fetch(`${currentUser}/folder/rename/${selectedItem}`, {
@@ -164,6 +185,7 @@ async function renameFolder() {
   });
   if (res.ok) popup.textContent = await res.text();
 }
+
 async function deleteFolder() {
   const res = await fetch(`${currentUser}/folder/delete/${selectedItem}`, {
     method: "DELETE",
@@ -173,6 +195,14 @@ async function deleteFolder() {
 
 document.body.addEventListener("click", () => {
   popup.textContent = "";
-  // document.querySelector(".file_actions").style.display = "none";
-  // document.querySelector(".folder_actions").style.display = "none";
+});
+
+document.querySelector(".logout").addEventListener("click", async () => {
+  const res = await fetch(`${baseURL}/${currentUser}/logout`);
+  if (res.ok) window.location.reload();
+});
+
+document.querySelector("span").addEventListener("click", () => {
+  document.querySelector(".file_actions").style.display = "none";
+  document.querySelector(".folder_actions").style.display = "none";
 });

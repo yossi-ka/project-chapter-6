@@ -16,24 +16,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "index.html"));
 });
 
-//  מיותר?
-// app.get("/enter/:folder", (req, res) => {
-//   const folder = req.params.folder;
-//   localPath += `/${folder}`;
-//   cmd = path.join(__dirname, localPath);
-//   const dir = fs.readdir(localPath, "utf-8", (err, dir) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       const dirSend = [];
-//       for (let i = 0; i < dir.length; i++) {
-//         dirSend.push(dir[i], fs.statSync(`${localPath}/${dir[i]}`).isFile());
-//       }
-//       res.send(dirSend);
-//     }
-//   });
-// });
-
 /*   ---  FILE METHODS  ---   */
 
 app.get("/:user/file/info/:filename", (req, res) => {
@@ -47,6 +29,7 @@ app.get("/:user/file/show/:filename", (req, res) => {
 });
 
 app.put("/:user/file/rename/:filename", (req, res) => {
+  console.log(req.body);
   fs.renameSync(
     `${localPath}/${req.params.filename}`,
     `${localPath}/${req.body.newname}`
@@ -121,6 +104,7 @@ app.get("/:user/folder/up/:foldername", (req, res) => {
 
 app.get("/:user/logout", (req, res) => {
   localPath = "folders";
+  res.send("good bay!");
 });
 
 // app.get("/folders/:user/:file/:method", (req, res) => {

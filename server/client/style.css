@@ -46,9 +46,15 @@ button {
 span {
   border: 1px solid black;
   padding: 2px;
+  cursor: pointer;
 }
 .popup {
   color: white;
   background-color: green;
   font-size: 30px;
+}
+.content {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
 }
