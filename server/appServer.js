@@ -65,6 +65,11 @@ app.get("/:user/folder/enter/:foldername", (req, res) => {
   res.send(localPath);
 });
 
+app.get("/:user/folder/info/:foldername", (req, res) => {
+  const states = fs.statSync(`${localPath}/${req.params.foldername}`);
+  res.send(states);
+});
+
 app.get("/:user/folder/show/:foldername", (req, res) => {
   // const folder = req.params.foldername;
   const dir = fs.readdir(localPath, "utf-8", (err, dir) => {
@@ -85,6 +90,7 @@ app.put("/:user/folder/rename/:foldername", (req, res) => {
     `${localPath}/${req.params.foldername}`,
     `${localPath}/${req.body.newname}`
   );
+  res.send("the folder has been successfully renamed!");
 });
 
 app.delete("/:user/folder/delete/:foldername", (req, res) => {

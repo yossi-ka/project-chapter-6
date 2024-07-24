@@ -40,6 +40,9 @@ async function login(username, password) {
 }
 
 async function dirDisplay(folder) {
+  document.querySelector(".folder_actions").style.display = "none";
+  document.querySelector(".file_actions").style.display = "none";
+
   //  shows folder content
   document.querySelectorAll(".unit").forEach((el) => el.remove());
   const dir = await fetch(
@@ -125,7 +128,6 @@ async function copyFile() {
 
 async function renameFile() {
   const newname = prompt("enter new name:");
-  console.log(`${currentUser}/file/rename/${selectedItem}`);
   const res = await fetch(`${currentUser}/file/rename/${selectedItem}`, {
     method: "PUT",
     headers: {
@@ -135,7 +137,10 @@ async function renameFile() {
       newname: newname,
     }),
   });
-  if (res.ok) popup.textContent = await res.text();
+  if (res.ok) {
+    popup.textContent = await res.text();
+  }
+  dirDisplay(selectedItem);
 }
 
 async function moveFile() {
@@ -174,13 +179,20 @@ async function infoFolder() {
 
 async function renameFolder() {
   const newname = prompt("enter new name:");
+  if (newname === null) return;
   const res = await fetch(`${currentUser}/folder/rename/${selectedItem}`, {
     method: "PUT",
-    body: {
-      newname: newname,
+    headers: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      newname: newname,
+    }),
   });
-  if (res.ok) popup.textContent = await res.text();
+  if (res.ok) {
+    popup.textContent = await res.text();
+  }
+  dirDisplay(selectedItem);
 }
 
 async function deleteFolder() {
@@ -204,4 +216,16 @@ document.querySelectorAll(".x").forEach((el) => {
     document.querySelector(".file_actions").style.display = "none";
     document.querySelector(".folder_actions").style.display = "none";
   });
+});
+
+document.querySelector(".back").addEventListener("click", async () => {
+  if (currentURL === `folders/${currentUser}`) return;
+  const res = await fetch(
+    `${baseURL}/${currentUser}/folder/up/${selectedItem}`
+  );
+  if (res.ok) {
+    currentURL = await res.text();
+    h1.textContent = currentURL;
+    dirDisplay(selectedItem);
+  }
 });
