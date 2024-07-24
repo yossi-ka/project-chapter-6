@@ -18,6 +18,7 @@ form.addEventListener("submit", (ev) => {
 });
 
 async function login(username, password) {
+  // window.location.replace("https://drive.google.com/drive/u/0/home"); 
   const res = await fetch(`${baseURL}/login`, {
     method: "POST",
     headers: {
