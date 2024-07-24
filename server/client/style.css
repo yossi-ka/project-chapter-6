@@ -1,4 +1,4 @@
-* {
+/* * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -10,7 +10,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: darkcyan; */
   color: brown;
   font-size: 30px;
 }
@@ -28,7 +27,6 @@ img {
 }
 .file_actions,
 .folder_actions {
-  /* right: 50%;*/
   top: 10%;
   position: absolute;
   display: none;
@@ -57,4 +55,157 @@ span {
   display: flex;
   justify-content: center;
   gap: 40px;
+} */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f2f5;
+  color: #333;
+}
+header,
+footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+h1 {
+  color: #333;
+} /* Form Styles */
+.form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+.form input[type="text"],
+.form input[type="password"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.form button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.form button:hover {
+  background: #0056b3;
+} /* Main Folder Styles */
+.mainFolder {
+  display: none;
+  text-align: center;
+  margin-top: 2rem;
+}
+.mainFolder button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 0.5rem;
+}
+.mainFolder button:hover {
+  background: #0056b3;
+}
+.uploadform {
+  margin-top: 1rem;
+}
+.uploadform input[type="file"] {
+  margin-bottom: 0.5rem;
+}
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.unit {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 120px;
+}
+.unit img {
+  max-width: 100%;
+  height: auto;
+}
+.unit .name {
+  margin-top: 0.5rem;
+  font-weight: bold;
+} /* Popup Styles */
+.popup {
+  background: #333;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+} /* Actions Styles */
+.file_actions,
+.folder_actions {
+  display: none;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  text-align: center;
+}
+.file_actions span.x,
+.folder_actions span.x {
+  cursor: pointer;
+  font-weight: bold;
+  float: right;
+}
+.action {
+  display: block;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 0.5rem auto;
+  width: 80%;
+}
+.action:hover {
+  background: #0056b3;
 }
