@@ -148,11 +148,7 @@ async function deleteFile() {
   if (res.ok) popup.textContent = await res.text();
 }
 async function showFolder() {
-  const path = await fetch(`${currentUser}/folder/enter/${selectedItem}`);
-  if (path.ok) {
-    const res = await fetch(`${currentUser}/folder/show/${selectedItem}`);
-    if (res.ok) popup.textContent = await res.text();
-  }
+  dirDisplay(selectedItem)
 }
 async function infoFolder() {
   const res = await fetch(`${currentUser}/folder/info/${selectedItem}`);
@@ -177,4 +173,6 @@ async function deleteFolder() {
 
 document.body.addEventListener("click", () => {
   popup.textContent = "";
+  // document.querySelector(".file_actions").style.display = "none";
+  // document.querySelector(".folder_actions").style.display = "none";
 });
