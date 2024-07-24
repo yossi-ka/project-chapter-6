@@ -62,7 +62,6 @@ async function dirDisplay(folder) {
         `.${tempImg.getAttribute("data-type")}_actions`
       ).style.display = "block";
     });
-    // tempDiv.setAttribute("data-url", `${baseURL}/${currentURL}/${dirArr[i]}`);
     content.append(temp);
   }
 }
