@@ -1,5 +1,3 @@
-
-
 const form = document.querySelector(".form");
 const content = document.querySelector(".content");
 const router = document.querySelector(".router");
@@ -48,7 +46,6 @@ async function dirDisplay(folder) {
     `http://localhost:3000/${currentUser}/folder/show/${folder}`
   );
   const dirArr = await dir.json();
-
   for (let i = 0; i < dirArr.length; i += 2) {
     const temp = document.querySelector("template").content.cloneNode(true);
     const tempDiv = temp.querySelector("div");
@@ -202,7 +199,9 @@ document.querySelector(".logout").addEventListener("click", async () => {
   if (res.ok) window.location.reload();
 });
 
-document.querySelector("span").addEventListener("click", () => {
-  document.querySelector(".file_actions").style.display = "none";
-  document.querySelector(".folder_actions").style.display = "none";
+document.querySelectorAll(".x").forEach((el) => {
+  el.addEventListener("click", () => {
+    document.querySelector(".file_actions").style.display = "none";
+    document.querySelector(".folder_actions").style.display = "none";
+  });
 });
