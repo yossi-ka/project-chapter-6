@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header>
-      <button class="logout">log out</button>
-      <button class="back">go back</button>
-    </header>
+    <header></header>
     <main>
       <div class="form">
         <form action="">
@@ -23,6 +20,12 @@
       </div>
       <div class="mainFolder" style="display: none">
         <h1 id="router"></h1>
+        <button class="logout">log out</button>
+        <button class="back">go back</button>
+        <form class="uploadform">
+          <input type="file" id="fileinput" />
+          <button type="submit">upload</button>
+        </form>
 
         <div class="content">
           <template>

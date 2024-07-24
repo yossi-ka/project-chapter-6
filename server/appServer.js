@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const cors = require("cors");
+const multer = require("multer");
 
 const app = express();
 app.use(cors());
@@ -10,8 +11,19 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "client")));
 
 let localPath = "folders";
-let cmd = path.join(__dirname, localPath);
+// let cmd = path.join(__dirname, localPath);
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, localPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
+
+//  landing page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "index.html"));
 });
@@ -29,7 +41,6 @@ app.get("/:user/file/show/:filename", (req, res) => {
 });
 
 app.put("/:user/file/rename/:filename", (req, res) => {
-  console.log(req.body);
   fs.renameSync(
     `${localPath}/${req.params.filename}`,
     `${localPath}/${req.body.newname}`
@@ -106,6 +117,15 @@ app.delete("/:user/folder/delete/:foldername", (req, res) => {
 app.get("/:user/folder/up/:foldername", (req, res) => {
   localPath = localPath.substring(0, localPath.lastIndexOf("/"));
   res.send(localPath);
+});
+
+/*   ---   DEFERENCE METHODS   ---   */
+
+app.post("/:user/file/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded..");
+  }
+  res.send("File uploaded successfully!");
 });
 
 /*   ---   LOG IN/OUT   ---   */

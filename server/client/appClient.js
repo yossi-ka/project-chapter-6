@@ -124,10 +124,12 @@ async function infoFile() {
 async function copyFile() {
   const res = await fetch(`${currentUser}/file/copy/${selectedItem}`);
   if (res.ok) popup.textContent = await res.text();
+  dirDisplay(selectedItem);
 }
 
 async function renameFile() {
   const newname = prompt("enter new name:");
+  if (newname === null) return;
   const res = await fetch(`${currentUser}/file/rename/${selectedItem}`, {
     method: "PUT",
     headers: {
@@ -152,6 +154,7 @@ async function moveFile() {
     },
   });
   if (res.ok) popup.textContent = await res.text();
+  dirDisplay(selectedItem);
 }
 
 async function deleteFile() {
@@ -159,6 +162,7 @@ async function deleteFile() {
     method: "DELETE",
   });
   if (res.ok) popup.textContent = await res.text();
+  dirDisplay(selectedItem);
 }
 
 async function showFolder() {
@@ -200,6 +204,7 @@ async function deleteFolder() {
     method: "DELETE",
   });
   if (res.ok) popup.textContent = await res.text();
+  dirDisplay(selectedItem);
 }
 
 document.body.addEventListener("click", () => {
@@ -227,5 +232,20 @@ document.querySelector(".back").addEventListener("click", async () => {
     currentURL = await res.text();
     h1.textContent = currentURL;
     dirDisplay(selectedItem);
+  }
+});
+
+document.querySelector(".uploadform").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fileInput = document.querySelector("#fileinput");
+  const formData = new FormData();
+  formData.append("file", fileInput.files[0]);
+  const res = await fetch(`${baseURL}/${currentUser}/file/upload`, {
+    method: "POST",
+    body: formData,
+  });
+  if (res.ok) {
+    popup.textContent = await res.text();
+    dirDisplay(selectedItem); // Update display to show the new file } else { popup.textContent = "File upload failed."; }
   }
 });
